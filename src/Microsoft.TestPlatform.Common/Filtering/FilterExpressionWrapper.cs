@@ -23,14 +23,14 @@ namespace Microsoft.VisualStudio.TestPlatform.Common.Filtering
         private readonly Regex filterRegex;
 
         /// <summary>
-        /// Initializes FilterExpressionWrapper with given filterString.  
+        /// Initializes FilterExpressionWrapper with given filterString.
         /// </summary>
         public FilterExpressionWrapper(string filterString, FilterOptions options = null)
         {
             ValidateArg.NotNullOrEmpty(filterString, "filterString");
             
             this.FilterString = filterString;
-            this.FilterOptions = options;            
+            this.FilterOptions = options;
 
             try
             {
@@ -39,7 +39,7 @@ namespace Microsoft.VisualStudio.TestPlatform.Common.Filtering
                 var regexString = options?.FilterRegEx;
                 if (!string.IsNullOrEmpty(regexString))
                 {
-                    filterRegex = new Regex(regexString);
+                    filterRegex = new Regex(regexString, RegexOptions.Compiled);
                 }
             }
             catch (FormatException ex)
@@ -102,7 +102,8 @@ namespace Microsoft.VisualStudio.TestPlatform.Common.Filtering
         {
             if (this.filterRegex == null)
             {
-                return null;
+                // Returning the actual property value if there's no filter regex
+                return value;
             }
 
             try
